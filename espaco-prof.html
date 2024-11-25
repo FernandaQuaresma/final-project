@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Oswald:wght@200..700&family=Trade+Winds&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+    <title>Espaço professor</title>
+    <link rel="stylesheet" href="form.css">
+</head>
+<body>
+    <header>
+        <div class="logo">EstudoPro</div>
+        <ul>
+            <li><a href="index.html">Sair</a></li>
+        </ul>
+    </header>
+
+    <!-- Título acima da caixa do formulário -->
+    <h2 class="title">Espaço professor</h2>
+
+    <div class="form-container">
+        <form action="#" method="POST">
+            <label for="materia">Selecione a matéria que deseja atribuir a nota:</label>
+            <div class="input-container">
+                <div class="icon-placeholder"><i class="bi bi-person-raised-hand"></i></div>
+                <select id="materia" name="materia">
+                    <option value="aluno">Matemática</option>
+                    <option value="professor">Português</option>
+                    <option value="professor">História</option>
+                    <option value="professor">Geografia</option>
+                    <option value="professor">Biologia</option>
+                    <option value="professor">Física</option>
+                    <option value="professor">Química</option>
+                    <option value="professor">ED. Física/option>
+                    <option value="professor">Inglês</option>
+                    <option value="professor">Desempenho</option>
+                </select>
+            </div>
+            <label for="aluno">Selecione o aluno que deseja atribuir a nota</label>
+            <div class="input-container">
+                <div class="icon-placeholder"><i class="bi bi-person-fill"></i></div>
+                <input type="aluno" id="aluno" name="aluno" required>
+            </div>
+            <label for="senha">Digita a nota que deseja atribuir</label>
+            <div class="input-container">
+                <div class="icon-placeholder"><i class="bi bi-key"></i></div>
+                <input type="password" id="senha" name="senha" placeholder="Ex 8.6" required>
+            </div>
+            <button type="submit">Atribuir nota</button>
+        </form>
+    </div>
+</body>
+</html>

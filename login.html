@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Oswald:wght@200..700&family=Trade+Winds&display=swap" rel="stylesheet">
+    <title>Login</title>
+    <link rel="stylesheet" href="form.css">
+</head>
+<body>
+    <header>
+        <div class="logo">EstudoPro</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </header>
+
+    <h2 class="title">Login</h2>
+
+    <div class="form-container">
+        <form id="formLogin">
+            <label for="user-type">Selecione a opção que se aplica:</label>
+            <div class="input-container">
+                <div class="icon-placeholder"><i class="bi bi-person-raised-hand"></i></div>
+                <select id="user-type" name="tipo_usuario">
+                    <option value="aluno">Aluno</option>
+                    <option value="professor">Professor</option>
+                </select>
+            </div>
+            <label for="email">E-mail</label>
+            <div class="input-container">
+                <div class="icon-placeholder">
+                    <i class="bi bi-envelope-fill"></i>
+                </div>
+                <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+            </div>
+            <label for="senha">Senha</label>
+            <div class="input-container">
+                <div class="icon-placeholder">
+                    <i class="bi bi-lock-fill"></i>
+                </div>
+                <input type="password" id="senha" name="senha" placeholder="Sua senha" required>
+            </div>
+            <button type="submit">Entrar</button>
+            <p><a href="cadastro.html">Ainda não tem uma conta? Cadastre-se</a></p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('formLogin').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const tipoUsuario = document.getElementById('user-type').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            const url = tipoUsuario === 'aluno' ? 'http://localhost:3031/login/aluno' : 'http://localhost:3031/login/professor';
+
+            const body = tipoUsuario === 'aluno'
+                ? { email_aluno: email, senha: senha }
+                : { email_professor: email, senha: senha };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body)
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Login realizado com sucesso!');
+                window.location.href = data.redirecionarPara;  // Redireciona para a página correta
+            } else {
+                alert(data.mensagem);
+            }
+        });
+    </script>
+</body>
+</html>

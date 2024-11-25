@@ -1,0 +1,70 @@
+header {
+    background-color: #ff914d;
+    display: flex;
+    margin: -10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo {
+    color: white;
+    font-size: 30px;
+    margin-left: 40px;
+    font-family: "Trade Winds", system-ui; /* Aplica a fonte apenas na logo */
+}
+
+header ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header ul li {
+    margin-left: 20px;
+    margin-right: 30px;
+}
+
+header ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 25px;
+    font-family: "Oswald", sans-serif;
+
+}
+
+body {
+    background-image: url("images/bg-image.jpg"); 
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+}
+
+.text-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #ff6100;
+    font-family: "Oswald";
+    background-color: #fff2e3;
+    margin: 80px auto; /* Centraliza horizontalmente */
+    padding: 20px; /* Espaçamento de 20px em cima e embaixo */
+    width: 50%; /* 50% da largura da tela */
+    min-height: 200px; /* Altura mínima da box */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.text-box span {
+    color: #ffffff;
+    font-family: "Trade Winds", system-ui;
+    text-shadow: 5px 5px 5px #ff914d;   
+}
+
+
+
+
+
+
