@@ -52,6 +52,33 @@ const professor = conexaoComBanco.define("professor", {
     freezeTableName: true,
 });
 
+// Tabela de nota
+const nota = conexaoComBanco.define("notas", {
+    nota: {
+        type: Sequelize.FLOAT,
+    },
+    alunoId: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: aluno,
+            key: 'id',
+        }
+    },
+    professorId: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: professor,
+            key: 'id',
+        }
+    }
+}, {
+    freezeTableName: true,
+});
+
+//aluno.sync({ force: true })
+//professor.sync({ force: true })
+nota.sync({ force: false })
+
 // Cadastro de aluno
 rotas.post("/cadastro/aluno", async (req, res) => {
     const { nome_aluno, email_aluno, senha } = req.body;
@@ -59,7 +86,7 @@ rotas.post("/cadastro/aluno", async (req, res) => {
         const novoAluno = await aluno.create({
             nome_aluno,
             email_aluno,
-            senha,
+            senha, 
         });
         res.status(201).json(novoAluno);
     } catch (error) {
@@ -85,9 +112,10 @@ rotas.post("/cadastro/professor", async (req, res) => {
 // Login de aluno
 rotas.post("/login/aluno", async (req, res) => {
     const { email_aluno, senha } = req.body;
+    let redirecionarPara = "espaco-aluno.html" 
     const alunoEncontrado = await aluno.findOne({ where: { email_aluno } });
     if (alunoEncontrado && alunoEncontrado.senha === senha) {
-        res.json({ redirecionarPara: "pagina_aluno.html" });
+        res.json({ redirecionarPara});
     } else {
         res.status(401).json({ mensagem: "Credenciais inválidas." });
     }
@@ -96,14 +124,15 @@ rotas.post("/login/aluno", async (req, res) => {
 // Login de professor
 rotas.post("/login/professor", async (req, res) => {
     const { email_professor, senha } = req.body;
+    let redirecionarPara = "espaco-prof.html"
     const professorEncontrado = await professor.findOne({ where: { email_professor } });
     if (professorEncontrado && professorEncontrado.senha === senha) {
-        res.json({ redirecionarPara: "pagina_professor.html" });
+        res.json({ redirecionarPara: "espaco-prof.html" });
     } else {
         res.status(401).json({ mensagem: "Credenciais inválidas." });
     }
 });
 
-rotas.listen(3000, () => {
+rotas.listen(3031, () => {
     console.log("Servidor rodando na porta 3031.");
 });

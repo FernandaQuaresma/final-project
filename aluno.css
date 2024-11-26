@@ -67,6 +67,7 @@ header ul li a:hover {
     width: 80%;
     max-width: 1000px;
     margin: 50px auto; 
+    border-radius: 20px;
 }
 
 .grid-container {

@@ -140,3 +140,13 @@ form p a {
 form p a:hover {
     text-decoration: underline;
 }
+
+.link-editar {
+    text-decoration: none;
+    color: #ff914d;
+    font-size: 40px;
+}
+
+.link-editar a:hover{
+    text-decoration: underline;
+}
