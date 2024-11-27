@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Notas</title>
+
+    <!-- Carregar fontes -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Trade+Winds&display=swap" rel="stylesheet">
+    
+    <!-- Carregar ícones do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="form.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">EstudoPro</div>
+        <ul>
+            <li><a href="index.html">Sair</a></li>
+        </ul>
+    </header>
+
+    <div class="title">
+        <h1>Editar Nota</h1>
+    </div>
+
+    <div class="form-container">
+        <form id="editarNotaForm">
+            <div class="input-container">
+                <div class="icon-placeholder">
+                    <i class="bi bi-person"></i> <!-- Ícone de pessoa -->
+                </div>
+                <select id="alunoId" name="alunoId">
+                    <!-- Aqui vão os alunos listados pela API -->
+                </select>
+            </div>
+
+            <div class="input-container">
+                <div class="icon-placeholder">
+                    <i class="bi bi-book"></i> <!-- Ícone de livro -->
+                </div>
+                <input type="text" id="materia" name="materia" placeholder="Matéria" required>
+            </div>
+
+            <div class="input-container">
+                <div class="icon-placeholder">
+                    <i class="bi bi-pencil"></i> <!-- Ícone de nota -->
+                </div>
+                <input type="number" id="nota" name="nota" placeholder="Nota" step="0.1" required>
+            </div>
+
+            <div class="input-container">
+                <div class="icon-placeholder">
+                    <i class="bi bi-person-circle"></i> <!-- Ícone de professor -->
+                </div>
+                <input type="text" id="professorId" name="professorId" placeholder="ID do Professor" required>
+            </div><br>
+
+            <button type="submit">Atualizar Nota</button>
+            <button type="button" id="deleteButton">Excluir Nota</button>
+        </form>
+    </div>
+
+    <script>
+        // Função para carregar alunos no select
+        fetch("http://localhost:3031/listar/alunos")
+            .then(response => response.json())
+            .then(alunos => {
+                const alunoSelect = document.getElementById('alunoId');
+                alunos.forEach(aluno => {
+                    const option = document.createElement('option');
+                    option.value = aluno.id;
+                    option.textContent = aluno.nome_aluno;
+                    alunoSelect.appendChild(option);
+                });
+            });
+
+        // Função para editar a nota
+        const editarNotaForm = document.getElementById('editarNotaForm');
+        editarNotaForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const alunoId = document.getElementById('alunoId').value;
+            const materia = document.getElementById('materia').value;
+            const nota = document.getElementById('nota').value;
+            const professorId = document.getElementById('professorId').value;
+
+            fetch("http://localhost:3031/editar/nota", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    alunoId,
+                    materia,
+                    nota,
+                    professorId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Erro ao atualizar nota:', error));
+        });
+
+        // Função para excluir a nota
+        document.getElementById('deleteButton').addEventListener('click', () => {
+            const alunoId = document.getElementById('alunoId').value;
+            const materia = document.getElementById('materia').value;
+
+            fetch("http://localhost:3031/excluir/nota", {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    alunoId,
+                    materia
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Erro ao excluir nota:', error));
+        });
+    </script>
+
+</body>
+</html>

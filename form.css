@@ -141,12 +141,12 @@ form p a:hover {
     text-decoration: underline;
 }
 
-.link-editar {
+.link a {
     text-decoration: none;
     color: #ff914d;
-    font-size: 40px;
+    font-size: 20px;
 }
 
-.link-editar a:hover{
+.link a:hover{
     text-decoration: underline;
 }

@@ -60,25 +60,23 @@ header ul li a:hover {
     margin-right: 48%;
 }
 
-/* Estilizando o container */
 .container {
     background-color: #fff2e3;
     padding: 30px;
     width: 80%;
     max-width: 1000px;
-    margin: 50px auto; 
+    margin: 50px auto;
     border-radius: 20px;
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 colunas */
-    grid-gap: 40px; /* Aumenta o espaçamento entre os quadrados */
-    justify-items: center; /* Alinha os itens no centro */
-    align-items: center; /* Alinha verticalmente */
+    grid-template-columns: repeat(5, 1fr); 
+    grid-gap: 40px; 
+    justify-items: center;
+    align-items: center;
 }
 
-/* Estilizando os quadrados */
 .square {
     width: 155px;
     height: 155px;
@@ -92,13 +90,13 @@ header ul li a:hover {
     font-size: 18px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    padding-top: 10px; /* Ajusta o texto dentro dos quadrados */
+    padding-top: 10px;
 }
 
 .container h3 {
     color: #ff914d;
     text-align: center;
-    margin-bottom: 30px; /* Espaçamento entre o h3 e os quadrados */
+    margin-bottom: 30px;
     font-size: 24px;
-    grid-column: span 5; /* Faz o h3 ocupar toda a linha acima dos quadrados */
+    grid-column: span 5; 
 }

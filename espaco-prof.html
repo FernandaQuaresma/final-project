@@ -1,59 +1,117 @@
-    <!DOCTYPE html>
-    <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Oswald:wght@200..700&family=Trade+Winds&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
-        <title>Espaço professor</title>
-        <link rel="stylesheet" href="form.css">
-    </head>
-    <body>
-        <header>
-            <div class="logo">EstudoPro</div>
-            <ul>
-                <li><a href="index.html">Sair</a></li>
-            </ul>
-        </header>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Oswald:wght@200..700&family=Trade+Winds&display=swap" rel="stylesheet">
+    <title>Espaço professor</title>
+    <link rel="stylesheet" href="form.css">
+</head>
+<body>
+    <header>
+        <div class="logo">EstudoPro</div>
+        <ul>
+            <li><a href="index.html">Sair</a></li>
+        </ul>
+    </header>
 
-        <!-- Título acima da caixa do formulário -->
-        <h2 class="title">Espaço professor</h2>
+    <h2 class="title">Espaço professor</h2>
 
-        <div class="form-container">
-            <form action="#" method="POST">
-                <label for="materia">Selecione a matéria que deseja atribuir a nota:</label>
-                <div class="input-container">
-                    <div class="icon-placeholder"><i class="bi bi-person-raised-hand"></i></div>
-                    <select id="materia" name="materia">
-                        <option value="aluno">Matemática</option>
-                        <option value="professor">Português</option>
-                        <option value="professor">História</option>
-                        <option value="professor">Geografia</option>
-                        <option value="professor">Biologia</option>
-                        <option value="professor">Física</option> 
-                        <option value="professor">Química</option>
-                        <option value="professor">ED. Física/option>
-                        <option value="professor">Inglês</option>
-                        <option value="professor">Desempenho</option>
-                    </select>
-                </div>
-                <label for="aluno">Selecione o aluno que deseja atribuir a nota</label>
-                <div class="input-container">
-                    <div class="icon-placeholder"><i class="bi bi-person-fill"></i></div>
-                    <input type="aluno" id="aluno" name="aluno" required>
-                </div>
-                <label for="senha">Digita a nota que deseja atribuir</label>
-                <div class="input-container">
-                    <div class="icon-placeholder"><i class="bi bi-key"></i></div>
-                    <input type="password" id="senha" name="senha" placeholder="Ex 8.6" required>
-                </div>
-                <button type="submit">Atribuir nota</button>
-                
-            <div class="link-editar">
-                <p><a href="edita-nota.html">Editar notas</a></p>
+    <div class="form-container">
+        <!-- Formulário de registro de nota -->
+        <form id="form">
+            <label for="aluno">Selecione o Aluno:</label>
+            <div class="input-container">
+                <div class="icon-placeholder"><i class="bi bi-person"></i></div>
+                <select id="aluno" name="aluno" required>
+                    <!-- As opções de alunos serão carregadas aqui -->
+                </select>
             </div>
-            </form>
-        </div>
-    </body>
-    </html>
+
+            <label for="materia">Matéria:</label>
+            <div class="input-container">
+                <div class="icon-placeholder"><i class="bi bi-book"></i></div>
+                <input type="text" id="materia" name="materia" required>
+            </div>
+
+            <label for="nota">Nota:</label>
+            <div class="input-container">
+                <div class="icon-placeholder"><i class="bi bi-pencil"></i></div>
+                <input type="number" id="nota" name="nota" required>
+            </div>
+
+            <label for="professor">ID do Professor:</label>
+            <div class="input-container">
+                <div class="icon-placeholder"><i class="bi bi-person-check"></i></div>
+                <input type="text" id="professor" name="professor" required>
+            </div>
+
+            <button type="submit">Registrar Nota</button>
+            
+            <div class="link">
+                 <a href="excluir-editar.html">Editar notas</a> 
+            </div>
+
+
+        </form>
+
+        <script>
+            // Função para carregar os alunos no select
+            async function carregarAlunos() {
+                try {
+                    const response = await fetch("http://localhost:3031/listar/alunos");
+                    const alunos = await response.json();
+
+                    const selectAluno = document.getElementById("aluno");
+                    alunos.forEach(aluno => {
+                        const option = document.createElement("option");
+                        option.value = aluno.id;
+                        option.textContent = aluno.nome_aluno;
+                        selectAluno.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error("Erro ao carregar alunos:", error);
+                }
+            }
+
+            carregarAlunos();
+
+            document.getElementById("form").addEventListener("submit", async function (event) {
+                event.preventDefault();
+
+                const alunoId = document.getElementById("aluno").value;
+                const materia = document.getElementById("materia").value;
+                const nota = document.getElementById("nota").value;
+                const professorId = document.getElementById("professor").value;
+
+                const body = {
+                    alunoId,
+                    materia,
+                    nota,
+                    professorId
+                };
+
+                try {
+                    const response = await fetch("http://localhost:3031/registrar/nota", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    });
+
+                    const result = await response.json();
+                    if (response.status === 201) {
+                        alert(result.message); // Exibe a mensagem de sucesso
+                    } else {
+                        alert(result.error); // Exibe o erro
+                    }
+                } catch (error) {
+                    alert("Erro ao registrar a nota.");
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>
