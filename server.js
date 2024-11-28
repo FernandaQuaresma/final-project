@@ -3,6 +3,7 @@ const Sequelize = require("sequelize");
 const cors = require("cors");
 const rotas = express();
 
+
 rotas.use(cors());
 rotas.use(express.json());
 
@@ -76,6 +77,13 @@ const Nota = conexaoComBanco.define("notas", {
 }, {
     freezeTableName: true,
 });
+
+// Definindo os relacionamentos
+aluno.hasMany(Nota, { foreignKey: 'alunoId' });
+Nota.belongsTo(aluno, { foreignKey: 'alunoId' });
+
+professor.hasMany(Nota, { foreignKey: 'professorId' });
+Nota.belongsTo(professor, { foreignKey: 'professorId' });
 
 // Criando as tabelas no banco
 conexaoComBanco.sync()
@@ -209,32 +217,32 @@ rotas.delete("/nota/:id", async (req, res) => {
     }
 });
 
-// Rota para buscar as notas do aluno
+// Middleware para permitir o uso de JSON nas requisições
+rotas.use(express.json());
+
+// Rota para buscar as notas de um aluno pelo ID
 rotas.get('/notas/aluno/:id', async (req, res) => {
+    const alunoId = req.params.id;
+
     try {
-      const alunoId = req.params.id;
-      const notas = await Nota.findAll({
-        where: {
-          alunoId: alunoId
+        // Busca as notas do aluno
+        const notasDoAluno = await Nota.findAll({
+            where: { alunoId },
+            attributes: ['materia', 'nota']
+        });
+
+        // Verifica se as notas foram encontradas
+        if (!notasDoAluno || notasDoAluno.length === 0) {
+            return res.status(404).json({ message: 'Nenhuma nota encontrada para este aluno.' });
         }
-      });
-  
-      console.log(notas); // Verifique se as notas estão sendo encontradas
-  
-      if (!notas || notas.length === 0) {
-        return res.status(404).json({ mensagem: 'Notas não encontradas.' });
-      }
-  
-      res.json(notas);
+
+        // Retorna as notas
+        res.json(notasDoAluno);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ mensagem: 'Erro ao buscar notas.' });
+        console.error(error);
+        res.status(500).json({ message: 'Erro ao buscar as notas do aluno.' });
     }
-  });
-  
-  
-
-
+});
 
 
 // Inicia o servidor

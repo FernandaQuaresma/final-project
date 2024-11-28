@@ -4,10 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Oswald:wght@200..700&family=Trade+Winds&display=swap"
-        rel="stylesheet">
-    <title>Espaço aluno</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Oswald:wght@200..700&family=Trade+Winds&display=swap" rel="stylesheet">
+    <title>Espaço Aluno</title>
     <link rel="stylesheet" href="aluno.css">
 </head>
 
@@ -19,48 +17,85 @@
         </ul>
     </header>
 
-    <h2 class="title">Espaço aluno</h2>
+    <h2 class="title">Espaço Aluno</h2>
 
     <div class="container">
-        <h3>Aqui estão suas notas:</h3>
-        <div class="grid-container">
-            <div class="square" id="matematica">Matemática</div>
-            <div class="square" id="portugues">Português</div>
-            <div class="square" id="historia">História</div>
-            <div class="square" id="geografia">Geografia</div>
-            <div class="square" id="biologia">Biologia</div>
-            <div class="square" id="fisica">Física</div>
-            <div class="square" id="quimica">Química</div>
-            <div class="square" id="ed_fisica">ED. Física</div>
-            <div class="square" id="ingles">Inglês</div>
-            <div class="square" id="desempenho">Desempenho</div>
+        <h3>Digite seu ID para ver suas notas:</h3>
+        <form id="form-aluno">
+            <input type="number" id="aluno-id" placeholder="Digite seu ID" required>
+            <button type="submit">Ver Notas</button>
+        </form>
+
+        <div id="notas-container" style="display:none;">
+            <h3>Suas notas:</h3>
+            <div class="grid-container">
+                <div class="square" id="matematica">Matemática: <span id="nota-matematica"></span></div>
+                <div class="square" id="portugues">Português: <span id="nota-portugues"></span></div>
+                <div class="square" id="historia">História: <span id="nota-historia"></span></div>
+                <div class="square" id="geografia">Geografia: <span id="nota-geografia"></span></div>
+                <div class="square" id="biologia">Biologia: <span id="nota-biologia"></span></div>
+                <div class="square" id="fisica">Física: <span id="nota-fisica"></span></div>
+                <div class="square" id="quimica">Química: <span id="nota-quimica"></span></div>
+                <div class="square" id="ed_fisica">Ed. Física: <span id="nota-ed_fisica"></span></div>
+                <div class="square" id="ingles">Inglês: <span id="nota-ingles"></span></div>
+                <div class="square" id="desempenho">Desempenho: <span id="nota-desempenho"></span></div>
+            </div>
         </div>
     </div>
 
     <script>
-        // ID do aluno, isso deve vir de algum lugar, pode ser a partir do login
-        const alunoId = 1;  // Alterar para o ID real do aluno
+        document.getElementById('form-aluno').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-        // Função para carregar as notas do aluno
-        fetch('http://localhost:3031/notas/aluno/1')
-            .then(response => response.json())
-            .then(data => {
-                if (Array.isArray(data)) {
-                    const listaNotas = document.getElementById('lista-notas');
-                    data.forEach(nota => {
-                        const li = document.createElement('li');
-                        li.textContent = `Nota: ${nota.valor}`; // Ajuste conforme a estrutura dos dados
-                        listaNotas.appendChild(li);
-                    });
-                } else {
-                    throw new Error('A resposta não é um array de notas');
+    // ID do aluno fornecido pelo input
+    const alunoId = document.getElementById('aluno-id').value;
+
+    if (!alunoId) {
+        alert('Por favor, insira um ID válido!');
+        return;
+    }
+
+    // Busca as notas do aluno pela API
+    fetch(`http://localhost:3031/notas/aluno/${alunoId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao buscar as notas.');
+            }
+            return response.json();
+        })
+        .then(notas => {
+            console.log('Notas do aluno:', notas);
+
+            // Limpa os valores antigos
+            const spans = document.querySelectorAll(".grid-container span");
+            spans.forEach(span => (span.textContent = ''));
+
+            // Preenche as notas nas divs correspondentes
+            notas.forEach(nota => {
+                const idMateria = `nota-${normalizarTexto(nota.materia)}`;
+                const notaSpan = document.getElementById(idMateria);
+                if (notaSpan) {
+                    notaSpan.textContent = nota.nota;
                 }
-            })
-            .catch(error => {
-                console.error(error);
             });
 
+            // Exibe o container com as notas
+            document.getElementById('notas-container').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Não foi possível carregar suas notas. Verifique o ID ou tente novamente mais tarde.');
+        });
+});
 
+// Função para normalizar nomes das matérias
+function normalizarTexto(texto) {
+    return texto
+        .toLowerCase()
+        .normalize('NFD') // Remove acentos
+        .replace(/[\u0300-\u036f]/g, '') // Remove diacríticos
+        .replace(/\s+/g, '_'); // Substitui espaços por _
+}
     </script>
 </body>
 
