@@ -70,7 +70,7 @@
             const spans = document.querySelectorAll(".grid-container span");
             spans.forEach(span => (span.textContent = ''));
 
-            // Preenche as notas nas divs correspondentes
+            // Preenche as notas nas divs 
             notas.forEach(nota => {
                 const idMateria = `nota-${normalizarTexto(nota.materia)}`;
                 const notaSpan = document.getElementById(idMateria);
@@ -88,7 +88,7 @@
         });
 });
 
-// Função para normalizar nomes das matérias
+// Função para arrumar os nomes das matérias
 function normalizarTexto(texto) {
     return texto
         .toLowerCase()
